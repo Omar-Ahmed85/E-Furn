@@ -1,0 +1,9 @@
+# IDEs Related
+
+.vscode
+.idea
+
+# Project Related
+
+.env
+tests

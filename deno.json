@@ -1,0 +1,12 @@
+{
+  "tasks": {
+    "dev": "deno run --env --watch -A --unstable-kv src/server.ts"
+  },
+  "imports": {
+    "@felix/argon2": "jsr:@felix/argon2@^3.0.2",
+    "@oak/oak": "jsr:@oak/oak@^17.1.4",
+    "@sitnik/nanoid": "jsr:@sitnik/nanoid@^5.1.5",
+    "@std/assert": "jsr:@std/assert@1",
+    "@std/http": "jsr:@std/http@^1.0.18"
+  }
+}

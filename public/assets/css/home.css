@@ -1,0 +1,141 @@
+@import url('./main.css');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=La+Belle+Aurore&display=swap');
+
+body {
+	padding: 2rem;
+}
+
+.hero-section {
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: 1fr 10fr;
+	width: 100%;
+	background-color: var(--primary-color);
+	height: 100vh;
+	border-radius: 20px;
+}
+
+.hero-section > header {
+	position: relative;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	align-self: flex-start;
+	width: 100%;
+	grid-area: 1 / 1 / 2 / 2;
+}
+
+header .logo {
+	font-family: 'La Belle Aurore';
+	font-size: 3rem;
+	color: var(--primary-color);
+	background-color: var(--secondary-color);
+	border-radius: 0 0 20px 0;
+	padding: 0.5rem 1rem;
+	cursor: pointer;
+	user-select: none;
+}
+
+header ul {
+	list-style: none;
+	display: flex;
+	justify-content: center;
+	align-items: flex-end;
+	background-color: var(--secondary-color);
+	column-gap: 2rem;
+	flex-grow: 0.4;
+	margin: 0;
+	padding: 1.5rem 2rem;
+	border-radius: 0 0 0 20px;
+}
+
+header ul li a {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-decoration: none;
+	column-gap: 2px;
+	color: var(--primary-color);
+	font-family: 'Inter', serif;
+	font-weight: 500;
+}
+
+header > button.menu {
+	display: none;
+	position: absolute;
+	right: 15px;
+	top: 15px;
+	border: none;
+	background: none;
+	padding: 5px;
+	cursor: pointer;
+
+	& > span {
+		font-size: 2.5rem;
+		color: var(--secondary-color);
+		pointer-events: none;
+		padding: 5px;
+	}
+}
+
+.hero-section > .main-section {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	container-type: inline-size;
+	container-name: main-section;
+	width: 100%;
+	height: 100%;
+}
+
+.main-section > .left {
+	margin-left: 40px;
+	color: var(--secondary-color);
+	max-width: 55%;
+}
+
+.left > h1 {
+	font-family: 'Inter', serif;
+	font-size: clamp(3rem, 5vw, 6rem);
+	font-weight: 500;
+	margin-bottom: 5rem;
+	text-wrap: balance;
+
+	&::selection {
+		color: var(--primary-color);
+		background-color: var(--secondary-color);
+	}
+}
+
+.main-section > .right {
+	width: 45%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.right img {
+	width: 100%;
+}
+
+@container main-section (width <= 1150px) {
+	.main-section > .right {
+		width: 60%;
+	}
+
+	.main-section > .left {
+		width: 40%;
+	}
+}
+
+@media (width <= 900px) {
+	header ul {
+		display: none;
+	}
+
+	header > button.menu {
+		display: block;
+	}
+}
