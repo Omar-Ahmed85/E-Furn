@@ -2,7 +2,7 @@ import { Router } from '@oak/oak/router';
 import { send } from "@oak/oak/send";
 import { Context } from "@oak/oak/context";
 import signupRoute from './users/signupRoute.ts';
-import authRoute from './users/authRoute.ts';
+import signinRoute from './users/signinRoute.ts';
 import deleteRoute from './users/deleteRoute.ts';
 
 const router = new Router();
@@ -26,8 +26,8 @@ export function defaultHandler(ctx: Context, error?: string, statusCode?: number
 }
 
 router.post('/user/signup', signupRoute.routes(), signupRoute.allowedMethods());
-router.post('/user/auth', authRoute.routes(), authRoute.allowedMethods());
-router.delete('/user/delete/', deleteRoute.routes(), deleteRoute.allowedMethods());
+router.post('/user/signin', signinRoute.routes(), signinRoute.allowedMethods());
+router.delete('/user/delete', deleteRoute.routes(), deleteRoute.allowedMethods());
 
 
 // #region Static file serving routes

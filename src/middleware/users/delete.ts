@@ -1,6 +1,6 @@
 import { Context } from "@oak/oak/context";
 import { defaultHandler, HttpStatus } from '../../routes/main.ts';
-import { deleteUserByEmail } from "../../db.ts";
+import { getUserByEmail, deleteUserByEmail } from "../../db.ts";
 
 
 export default async function deleteUser(ctx: Context) {
@@ -15,6 +15,13 @@ export default async function deleteUser(ctx: Context) {
             return;
         }
     
+        const check = await getUserByEmail(body.email);
+
+        if (!check) {
+            defaultHandler(ctx, 'User not found!', HttpStatus.NotFound);
+            return;
+        }
+
         const result = await deleteUserByEmail(body.email);
         
         if (!result) {

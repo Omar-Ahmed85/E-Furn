@@ -2,7 +2,7 @@ import { Context } from "@oak/oak/context";
 import { nanoid } from '@sitnik/nanoid';
 import { hash } from '@felix/argon2';
 import { defaultHandler, HttpStatus } from "../../routes/main.ts";
-import { storeNewUser } from "../../db.ts";
+import { storeNewUser, getUserByEmail } from "../../db.ts";
 
 export interface User {
     id: string;
@@ -36,10 +36,25 @@ export default async function createUser(ctx: Context) {
             return;
         }
 
-        const check = validation(email, password);
+        const validate = validation(email, password);
 
-        if (!check) {
+        if (!validate) {
             defaultHandler(ctx, 'Invalid email or password format!', HttpStatus.BadRequest);
+            return;
+        }
+
+        const check = await getUserByEmail(email);
+
+        if (check) {
+            ctx.response.status = 200;
+            ctx.response.body = {
+                message: 'User already exists!',
+                user: {
+                    id: check.id,
+                    name: check.name,
+                    email: check.email
+                }
+            }
             return;
         }
 
