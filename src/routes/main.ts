@@ -19,7 +19,8 @@ export enum HttpStatus {
 export function defaultHandler(ctx: Context, error?: string, statusCode?: number) {
     ctx.response.status = statusCode || 500;
     ctx.response.body = {
-        error: error || 'An error occurred!',
+        success: false,
+        message: error || 'An error occurred!',
         requestUrl: ctx.request.url.href,
         method: ctx.request.method
     }

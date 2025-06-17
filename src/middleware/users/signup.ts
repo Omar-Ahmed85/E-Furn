@@ -2,7 +2,7 @@ import { Context } from "@oak/oak/context";
 import { nanoid } from '@sitnik/nanoid';
 import { hash } from '@felix/argon2';
 import { defaultHandler, HttpStatus } from "../../routes/main.ts";
-import { storeNewUser, getUserByEmail } from "../../db.ts";
+import { storeNewUser, getUserByEmail } from "../../services/db.ts";
 
 export interface User {
     id: string;
@@ -28,7 +28,7 @@ export default async function createUser(ctx: Context) {
         const body = await ctx.request.body.formData();
 
         const name = (body?.get('name')) as string | null;
-        const email = (body?.get('email')) as string | null;
+        const email = ((body?.get('email')) as string | null)?.toLowerCase();
         const password = (body?.get('password')) as string | null;;
 
         if (!body || !name || !email || !password) {
@@ -48,9 +48,9 @@ export default async function createUser(ctx: Context) {
         if (check) {
             ctx.response.status = 200;
             ctx.response.body = {
+                success: true,
                 message: 'User already exists!',
                 user: {
-                    id: check.id,
                     name: check.name,
                     email: check.email
                 }
@@ -72,13 +72,13 @@ export default async function createUser(ctx: Context) {
             // @ts-ignore: Problem from the compiler, not the code.
             ctx.response.status = HttpStatus.Created;
             ctx.response.body = {
+                success: true,
                 message: 'User created successfully!',
                 user: {
-                    id: user.id,
                     name: user.name,
                     email: user.email
                 }
-            }
+            };
         } else {
             defaultHandler(ctx, 'Error storing user data!', HttpStatus.InternalServerError);
             return;

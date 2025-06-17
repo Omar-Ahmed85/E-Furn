@@ -1,6 +1,6 @@
 import { Context } from "@oak/oak/context";
 import { defaultHandler, HttpStatus } from '../../routes/main.ts';
-import { getUserByEmail, deleteUserByEmail } from "../../db.ts";
+import { getUserByEmail, deleteUserByEmail } from "../../services/db.ts";
 
 
 export default async function deleteUser(ctx: Context) {
@@ -10,33 +10,27 @@ export default async function deleteUser(ctx: Context) {
         if (!body || !body.email) {
             defaultHandler(ctx, 'Invalid user data!', HttpStatus.BadRequest);
             return;
-        } else if (!body.isAuth) {
-            defaultHandler(ctx, 'User not authenticated!', HttpStatus.Unauthorized);
-            return;
         }
     
-        const check = await getUserByEmail(body.email);
+        const user = await getUserByEmail(body.email.toLowerCase());
 
-        if (!check) {
+        if (!user) {
             defaultHandler(ctx, 'User not found!', HttpStatus.NotFound);
             return;
         }
 
-        const result = await deleteUserByEmail(body.email);
+        const result = await deleteUserByEmail(user.email.toLowerCase(), user.id);
         
         if (!result) {
             defaultHandler(ctx, 'Error deleting user!', HttpStatus.InternalServerError);
             return;
         }
 
+        await ctx.cookies.delete('sid');
+        
         // @ts-ignore: Problem with the compiler, not the code.
         ctx.response.status = HttpStatus.Ok;
-        ctx.response.body = {
-            message: 'User deleted successfully!',
-            user: {
-                email: body.email
-            }
-        }
+        ctx.response.redirect('/');
 
     } catch (_error) {
         defaultHandler(ctx, 'Error deleting user!', HttpStatus.InternalServerError);
